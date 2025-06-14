@@ -13,6 +13,8 @@ export const SITE = {
   showBackButton: true, // show back button in post detail
   editPost: {
     enabled: false,
+    text: 'Suggest changes',
+    url: '',
   },
   dynamicOgImage: true,
   lang: 'en', // html lang code. Set this empty and default will be "en"
