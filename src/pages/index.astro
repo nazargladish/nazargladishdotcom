@@ -1,0 +1,92 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Socials from "@/components/Socials.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import Card from "@/components/Card.astro";
+import Hr from "@/components/Hr.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import { SITE } from "@/config";
+import { SOCIALS } from "@/constants";
+const posts = await getCollection("blog");
+
+const sortedPosts = getSortedPosts(posts);
+const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+
+---
+
+<Layout>
+  <main id="main-content" data-layout="index">
+    <section id="hero" class="pt-8 pb-6">
+    <h1 class="text-white bg-[rgb(133,174,249)] inline py-1">Nazar Gladish</h1>
+    
+
+      <p class="mt-5">
+        Hi there! I'm startup enthusiast and an AI engineer, mainly working on the web <LinkButton href="/about" class="underline decoration-dashed underline-offset-4">...more about me</LinkButton><br /><br />
+        Here to hire? Take a look at <LinkButton target="_blank" href="https://docs.google.com/document/d/e/2PACX-1vRCuKuq3PTOaFF4PemLO8aT98hCn5Q8zRLWaNpE49m-iLcvoL1Ug88Y4_2zNmiscOQFNU2LmhiIUmO0/pub" class="underline decoration-dashed underline-offset-4">my CV</LinkButton>
+      </p>
+
+      {
+        // only display if at least one social link is enabled
+        SOCIALS.length > 0 && (
+          <div class="flex flex-col sm:flex-row sm:items-center">
+            <div class="mr-2 mb-1 whitespace-nowrap sm:mb-0">Socials:</div>
+            <Socials />
+          </div>
+        )
+      }
+    </section>
+
+    <Hr />
+
+    {
+      featuredPosts.length > 0 && (
+        <>
+          <section id="featured" class="pt-12 pb-6">
+            <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
+            <ul>
+              {featuredPosts.map(data => (
+                <Card variant="h3" {...data} />
+              ))}
+            </ul>
+          </section>
+          {recentPosts.length > 0 && <Hr />}
+        </>
+      )
+    }
+
+    {
+      recentPosts.length > 0 && (
+        <section id="recent-posts" class="pt-12 pb-6">
+          <h2 class="text-2xl font-semibold tracking-wide">Recent posts</h2>
+          <ul>
+            {recentPosts.map(
+              (data, index) =>
+                index < SITE.postPerIndex && <Card variant="h3" {...data} />
+            )}
+          </ul>
+        </section>
+      )
+    }
+
+    <div class="my-8 text-center">
+      <LinkButton href="/posts/">
+        All Posts
+        <IconArrowRight class="inline-block" />
+      </LinkButton>
+    </div>
+  </main>
+  <!-- <Footer /> -->
+</Layout>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
+      ?.dataset?.layout;
+    if (indexLayout) {
+      sessionStorage.setItem("backUrl", "/");
+    }
+  });
+</script>
