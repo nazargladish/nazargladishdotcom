@@ -1,7 +1,7 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 
-export interface Props extends HTMLAttributes<'a'> {
+export interface Props extends HTMLAttributes<"a"> {
   href: string;
   disabled?: boolean;
   class?: string; // overrides Astro's native `class` support
@@ -11,7 +11,7 @@ const {
   id,
   href,
   class: className = "",
-   ["aria-label"]: ariaLabel,
+  ["aria-label"]: ariaLabel,
   title,
   disabled = false,
   ...rest
@@ -20,24 +20,11 @@ const {
 
 {
   disabled ? (
-    <span
-      id={id}
-      class:list={["group inline-block", className]}
-      title={title}
-      aria-disabled={disabled}
-      {...rest}
-    >
+    <span id={id} title={title} aria-disabled={disabled} {...rest}>
       <slot />
     </span>
   ) : (
-    <a
-      id={id}
-      href={href}
-      class:list={["group inline-block hover:text-accent", className]}
-      aria-label={ariaLabel}
-      title={title}
-      {...rest}
-    >
+    <a id={id} href={href} aria-label={ariaLabel} title={title} {...rest}>
       <slot />
     </a>
   )

@@ -6,13 +6,9 @@ import { SITE } from "@/config";
 
 {
   SITE.showBackButton && (
-    <div class="mx-auto flex w-full max-w-3xl items-center justify-start px-2">
-      <LinkButton
-        id="back-button"
-        href="/"
-        class="focus-outline mt-8 mb-2 flex hover:text-foreground/75"
-      >
-        <IconChevronLeft class="inline-block size-6" />
+    <div>
+      <LinkButton class="back-button" id="back-button" href="/">
+        <IconChevronLeft />
         <span>Go back</span>
       </LinkButton>
     </div>
@@ -35,3 +31,12 @@ import { SITE } from "@/config";
   document.addEventListener("astro:page-load", updateGoBackUrl);
   updateGoBackUrl();
 </script>
+
+<style>
+  .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+  }
+</style>

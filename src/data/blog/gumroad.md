@@ -1,11 +1,11 @@
 ---
-title: 'Gumroad'
+title: "Gumroad"
 author: Nazar Gladish
 pubDatetime: 2025-06-13T16:00:00-04:00
 slug: gumroad
 featured: false
 draft: false
-description: ''
+description: ""
 ---
 
 I went from nothing to becoming part of a small, world-class team in tech — in just a year and a half.

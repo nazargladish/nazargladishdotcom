@@ -1,16 +1,15 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-import Tag from "@/components/Tag.astro";
 import Datetime from "@/components/Datetime.astro";
 import EditPost from "@/components/EditPost.astro";
 import ShareLinks from "@/components/ShareLinks.astro";
-import BackButton from "@/components/BackButton.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
 import { SITE } from "@/config";
+import Hr from "@/components/Hr.astro";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -28,7 +27,6 @@ const {
   pubDatetime,
   modDatetime,
   timezone,
-  tags,
   hideEditPost,
 } = post.data;
 
@@ -79,80 +77,56 @@ const nextPost =
 ---
 
 <Layout {...layoutProps}>
-  <BackButton />
-  <main
-    id="main-content"
-    class:list={[
-      "mx-auto w-full max-w-3xl px-4 pb-12",
-      { "mt-8": !SITE.showBackButton },
-    ]}
-    data-pagefind-body
-  >
-    <h1
-      transition:name={slugifyStr(title)}
-      class="inline-block text-2xl font-bold text-accent sm:text-3xl"
-    >
+  <!-- <BackButton /> -->
+  <main id="main-content" data-pagefind-body>
+    <h1 transition:name={slugifyStr(title)}>
       {title}
     </h1>
-    <div class="flex items-center gap-4">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" class="my-2" />
-      <EditPost class="max-sm:hidden" {hideEditPost} {post} />
+    <div>
+      <Datetime {pubDatetime} {modDatetime} {timezone} />
+      <EditPost {hideEditPost} {post} />
     </div>
-    <article id="article" class="mx-auto prose mt-8 max-w-3xl">
+
+    <Hr />
+
+    <article id="article" class="prose">
       <Content />
     </article>
 
-    <hr class="my-8 border-dashed" />
+    <hr />
 
-    <EditPost class="sm:hidden" {hideEditPost} {post} />
+    <EditPost {hideEditPost} {post} />
 
-    <ul class="mt-4 mb-8 sm:my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
-    </ul>
-
-    <div
-      class="flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end sm:gap-4"
-    >
+    <div class="post-meta">
       <ShareLinks />
 
-      <button
-        id="back-to-top"
-        class="focus-outline py-1 whitespace-nowrap hover:opacity-75"
-      >
-        <IconChevronLeft class="inline-block rotate-90" />
+      <button class="back-to-top" id="back-to-top">
+        <IconChevronLeft class="icon-chevron-left" />
         <span>Back to Top</span>
       </button>
     </div>
 
-    <hr class="my-6 border-dashed" />
-
     <!-- Previous/Next Post Buttons -->
-    <div data-pagefind-ignore class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div>
       {
         prevPost && (
-          <a
-            href={`/posts/${prevPost.slug}`}
-            class="flex w-full gap-1 hover:opacity-75"
-          >
-            <IconChevronLeft class="inline-block flex-none" />
+          <a href={`/${prevPost.slug}`}>
+            <IconChevronLeft />
             <div>
               <span>Previous Post</span>
-              <div class="text-sm text-accent/85">{prevPost.title}</div>
+              <div>{prevPost.title}</div>
             </div>
           </a>
         )
       }
       {
         nextPost && (
-          <a
-            href={`/posts/${nextPost.slug}`}
-            class="flex w-full justify-end gap-1 text-right hover:opacity-75 sm:col-start-2"
-          >
+          <a href={`/${nextPost.slug}`}>
             <div>
               <span>Next Post</span>
-              <div class="text-sm text-accent/85">{nextPost.title}</div>
+              <div>{nextPost.title}</div>
             </div>
-            <IconChevronRight class="inline-block flex-none" />
+            <IconChevronRight />
           </a>
         )
       }
@@ -166,12 +140,11 @@ const nextPost =
   function createProgressBar() {
     // Create the main container div
     const progressContainer = document.createElement("div");
-    progressContainer.className =
-      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+    progressContainer.className = "progress-container";
 
     // Create the progress bar div
     const progressBar = document.createElement("div");
-    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.className = "progress-bar";
     progressBar.id = "myBar";
 
     // Append the progress bar to the progress container
@@ -209,10 +182,7 @@ const nextPost =
       document.querySelectorAll("h2, h3, h4, h5, h6")
     );
     for (const heading of headings) {
-      heading.classList.add("group");
       const link = document.createElement("a");
-      link.className =
-        "heading-link ml-2 opacity-0 group-hover:opacity-100 focus:opacity-100";
       link.href = "#" + heading.id;
 
       const span = document.createElement("span");
@@ -235,8 +205,6 @@ const nextPost =
       wrapper.style.position = "relative";
 
       const copyButton = document.createElement("button");
-      copyButton.className =
-        "copy-code absolute right-3 -top-3 rounded bg-muted px-2 py-1 text-xs leading-4 text-foreground font-medium";
       copyButton.innerHTML = copyButtonLabel;
       codeBlock.setAttribute("tabindex", "0");
       codeBlock.appendChild(copyButton);
@@ -281,3 +249,25 @@ const nextPost =
     window.scrollTo({ left: 0, top: 0, behavior: "instant" })
   );
 </script>
+
+<style>
+  h1 {
+    margin-bottom: 0;
+  }
+  .back-to-top {
+    display: flex;
+    align-items: center;
+    padding: 0.2rem;
+    opacity: 75%;
+  }
+  .icon-chevron-left {
+    rotate: 90deg;
+    scale: 0.8;
+  }
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 1.5rem;
+  }
+</style>
