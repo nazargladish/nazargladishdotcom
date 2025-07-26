@@ -27,6 +27,7 @@ main {
 }
 
 a {
+  display: inline-flex;
   color: var(--accent-color);
 }
 
