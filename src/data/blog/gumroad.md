@@ -4,7 +4,7 @@ author: Nazar Gladish
 pubDatetime: 2025-06-13T16:00:00-04:00
 slug: gumroad
 featured: false
-draft: false
+draft: true
 description: ""
 ---
 
