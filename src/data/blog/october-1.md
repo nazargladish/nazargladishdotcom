@@ -26,7 +26,7 @@ I know you never loved me. It doesn’t matter anymore.
 
 You will always be, to me, my lovely girl.
 
-![Vistula River](../../assets/imags/visla.jpg)
+![Vistula River](../../assets/images/visla.jpg)
 
-![Ziko](../../assets/imags/ziko.jpg)
+![Ziko](../../assets/images/ziko.jpg)
 
