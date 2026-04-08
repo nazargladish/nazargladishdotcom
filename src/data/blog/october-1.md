@@ -8,25 +8,22 @@ draft: false
 description: ""
 ---
 
-After years of blood-soaked fighting, the day felt like liberation.
-At last, the enemy surrendered, and the sky – for the first time I could remember – stood clear. It was a bright day. October 1.
+Years of fighting, it finally stopped.
 
-I found myself by the Vistula River, my heartbeat slowing, my mind finally at ease. There was no more fighting, no struggle, no pain.
+My heartbeat slowed, my mind grew quiet. No more fighting, no struggle, no pain – I sat by the Vistula, looking at the sky, still and scattered with stars.
 
-Lying on the cold stone, I looked up at the night sky, quiet and scattered with stars.
+In a moment, I saw the world through a child’s eyes – full of love, full of peace.
 
-And for a moment, I saw the world through a child’s eyes – full of love, full of peace.
+Then came the pines. The vast, lonely forest.
+It’s scary sometimes – it scares a child’s heart.
 
-Then there was a forest – dark, empty, waiting. The fight began again.
+And it makes me miss peace.
+You were that peace –
+the first in a lifetime.
 
-But for a fleeting moment, there was peace. That peace was you – the first in my life.
-
-I know you never loved me. It doesn’t matter anymore.
-
-
-You will always be, to me, my lovely girl.
+You never loved me – though it doesn’t matter anymore.
+To me, you will always remain my lovely girl.
+As you made me love deeply again.
 
 ![Vistula River](../../assets/images/visla.jpg)
-
-![Ziko](../../assets/images/ziko.jpg)
 
