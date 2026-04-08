@@ -23,5 +23,10 @@ But for a fleeting moment, there was peace. That peace was you – the first in 
 
 I know you never loved me. It doesn’t matter anymore.
 
+
 You will always be, to me, my lovely girl.
+
+![Vistula River](../../assets/imags/visla.jpg)
+
+![Ziko](../../assets/imags/ziko.jpg)
 
