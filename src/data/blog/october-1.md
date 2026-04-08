@@ -19,11 +19,11 @@ It’s scary sometimes – it scares a child’s heart.
 
 And it makes me miss peace.
 You were that peace –
-the first in a lifetime.
+the first of its kind.
 
-You never loved me – though it doesn’t matter anymore.
-To me, you will always remain my lovely girl.
-As you made me love deeply again.
+You never loved me – it doesn’t matter anymore.
+You will always remain, to me, my lovely girl.
+As you made me feel love deeply again.
 
 ![Vistula River](../../assets/images/visla.jpg)
 
