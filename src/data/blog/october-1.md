@@ -21,11 +21,11 @@ And it makes me miss peace.
 You were that peace –
 the first of its kind.
 
-I've got wounds on the right hand, but now I have on the left, one from your cigarette.
-
 You never loved me – it doesn’t matter anymore.
 You will always remain, to me, my lovely girl.
 As you made me feel love deeply again.
+
+I've got wounds on the right hand, but now I have on the left, one from your cigarette.
 
 ![Vistula River](../../assets/images/visla.jpg)
 
