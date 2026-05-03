@@ -58,16 +58,6 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
 ---
 
 <Layout {...layoutProps}>
-  <header class="post-header">
-    <a href="/" class="close-btn" aria-label="Back to home">&times;</a>
-    <a href="/" class="site-name">Nazar Gladish</a>
-    <button id="theme-btn" class="theme-toggle" aria-label="Toggle theme">
-      <span class="toggle-track">
-        <span class="toggle-thumb"></span>
-      </span>
-    </button>
-  </header>
-
   <div class="post-layout">
     {
       tocHeadings.length > 0 && (
@@ -87,6 +77,14 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
     }
 
     <main id="main-content" data-pagefind-body>
+      <header class="post-header">
+        <a href="/" class="site-name">Nazar Gladish</a>
+        <button id="theme-btn" class="theme-toggle" aria-label="Toggle theme">
+          <span class="toggle-track">
+            <span class="toggle-thumb"></span>
+          </span>
+        </button>
+      </header>
       <h1 transition:name={slugifyStr(title)}>
         {title}
       </h1>
@@ -182,24 +180,7 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
   .post-header {
     display: flex;
     align-items: center;
-    padding: 1rem 2rem;
-    position: sticky;
-    top: 0;
-    background: var(--bg-color);
-    z-index: 10;
-  }
-
-  .close-btn {
-    font-size: 1.5rem;
-    margin-right: 1.5rem;
-    line-height: 1;
-    text-decoration: none;
-    opacity: 0.8;
-  }
-
-  .close-btn:hover {
-    opacity: 1;
-    text-decoration: none;
+    padding: 0 0 2rem 0;
   }
 
   .site-name {
@@ -268,7 +249,7 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
   }
 
   h1 {
-    font-size: 3.5rem;
+    font-size: 62px;
     line-height: 1.1;
     margin: 0 0 0.5rem 0;
   }
@@ -291,10 +272,6 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
   }
 
   @media (max-width: 768px) {
-    .post-header {
-      padding: 1rem;
-    }
-
     .post-layout {
       flex-direction: column;
       padding: 1rem 1rem 3rem;
