@@ -5,7 +5,7 @@ export const SITE = {
   desc: "Nazar Gladish's personal website.",
   title: "Nazar Gladish",
   ogImage: "astropaper-og.jpg",
-  lightAndDarkMode: false,
+  lightAndDarkMode: true,
   postPerIndex: 5,
   postPerPage: 10,
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes

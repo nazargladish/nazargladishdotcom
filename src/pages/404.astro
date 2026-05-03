@@ -1,15 +1,51 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import LinkButton from "@/components/LinkButton.astro";
 import { SITE } from "@/config";
 ---
 
 <Layout title={`404 Not Found | ${SITE.title}`}>
+  <header class="page-header">
+    <a href="/" class="site-name">Nazar Gladish</a>
+    <button id="theme-btn" class="theme-toggle" aria-label="Toggle theme">
+      <span class="toggle-track">
+        <span class="toggle-thumb"></span>
+      </span>
+    </button>
+  </header>
   <main id="main-content">
-    <div>
-      <h1>404</h1>
-      <p>Page Not Found</p>
-      <LinkButton href="/"> Go back home </LinkButton>
-    </div>
+    <h1>404</h1>
+    <p>Page Not Found</p>
+    <p><a href="/">Go back home</a></p>
   </main>
 </Layout>
+
+<style>
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+  }
+
+  .site-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+  }
+
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 4rem 24px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 4rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+</style>

@@ -1,5 +1,4 @@
 ---
-import Breadcrumb from "@/components/Breadcrumb.astro";
 import { SITE } from "@/config";
 
 interface StringTitleProp {
@@ -20,7 +19,14 @@ const { props } = Astro;
 const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
 ---
 
-<Breadcrumb />
+<header class="page-header">
+  <a href="/" class="site-name">Nazar Gladish</a>
+  <button id="theme-btn" class="theme-toggle" aria-label="Toggle theme">
+    <span class="toggle-track">
+      <span class="toggle-thumb"></span>
+    </span>
+  </button>
+</header>
 <main data-backUrl={backUrl} id="main-content">
   {
     "titleTransition" in props ? (
@@ -34,7 +40,7 @@ const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
       <h1>{props.pageTitle}</h1>
     )
   }
-  <p>{props.pageDesc}</p>
+  {props.pageDesc && <p>{props.pageDesc}</p>}
   <slot />
 </main>
 
@@ -48,3 +54,32 @@ const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
     }
   });
 </script>
+
+<style>
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+  }
+
+  .site-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+  }
+
+  .site-name:hover {
+    text-decoration: none;
+  }
+
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 1rem 24px 4rem;
+  }
+
+  h1 {
+    margin: 0 0 1rem 0;
+  }
+</style>

@@ -1,64 +1,72 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-import Socials from "@/components/Socials.astro";
-import Card from "@/components/Card.astro";
-import Hr from "@/components/Hr.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
-import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
-const posts = await getCollection("blog");
+import { getPath } from "@/utils/getPath";
 
+const posts = await getCollection("blog");
 const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 ---
 
 <Layout>
   <main id="main-content" data-layout="index">
-    <header class="header">
-      <h1 class="site-title">Nazar Gladish</h1>
-      {
-        // only display if at least one social link is enabled
-        SOCIALS.length > 0 && <Socials />
-      }
+    <header>
+      <h1>Nazar Gladish</h1>
+      <button id="theme-btn" class="theme-toggle" aria-label="Toggle theme">
+        <span class="toggle-track">
+          <span class="toggle-thumb"></span>
+        </span>
+      </button>
     </header>
 
-    <section id="experience">
+    <section class="bio">
       <p>
-        I dropped out of my Economics degree to focus on software engineering — the thing I’d been into since I was a kid. I moved to Poland at 17 and started working as a Software Engineer the week I turned 18, doing short stints across a few organizations. A year in, I earned a senior‑engineer trial at <a href="https://github.com/antiwork" target="_blank" rel="noopener noreferrer">Gumroad (Antiwork)</a>. I still contribute to Antiwork’s products — mainly <a href="https://flexile.com" target="_blank" rel="noopener noreferrer">flexile.com</a> — while building my own stuff on the side.
+        I dropped out of my Economics degree to focus on software engineering —
+        the thing I'd been into since I was a kid. I moved to Poland at 17 and
+        started working as a Software Engineer the week I turned 18, doing short
+        stints across a few organizations. A year in, I earned a
+        senior&#8209;engineer trial at <a
+          href="https://github.com/antiwork"
+          target="_blank"
+          rel="noopener noreferrer">Gumroad (Antiwork)</a
+        >. I still contribute to Antiwork's products — mainly <a
+          href="https://flexile.com"
+          target="_blank"
+          rel="noopener noreferrer">flexile.com</a
+        > — while building my own stuff on the side.
       </p>
-      <Hr />
     </section>
 
     {
-      featuredPosts.length > 0 && (
-        <>
-          <section id="featured">
-            <h2>Featured</h2>
-            <ul>
-              {featuredPosts.map(data => (
-                <Card {...data} />
-              ))}
-            </ul>
-          </section>
-          {recentPosts.length > 0 && <Hr />}
-        </>
-      )
-    }
-
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts">
-          <h2>Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              (data, index) => index < SITE.postPerIndex && <Card {...data} />
-            )}
+      sortedPosts.length > 0 && (
+        <section class="section">
+          <h2>Posts</h2>
+          <ul class="link-list">
+            {sortedPosts.map(post => (
+              <li>
+                <a href={getPath(post.id, post.filePath)}>{post.data.title}</a>
+              </li>
+            ))}
           </ul>
         </section>
       )
     }
+
+    <section class="section">
+      <h2>Links</h2>
+      <ul class="link-list">
+        <li>
+          <a
+            href="https://x.com/nazargladish"
+            target="_blank"
+            rel="noopener noreferrer">X (Twitter)</a
+          >
+        </li>
+        <li>
+          <a href="mailto:hi@nazargladish.com">Email</a>
+        </li>
+      </ul>
+    </section>
   </main>
 </Layout>
 
@@ -73,14 +81,59 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 </script>
 
 <style>
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2rem 24px 4rem;
+  }
+
   header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 0;
+    margin-bottom: 2rem;
   }
-  .site-title {
-    font-size: 1.5em;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
     margin: 0;
+  }
+
+  .bio {
+    margin-bottom: 2.5rem;
+  }
+
+  .bio p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .bio a {
+    text-decoration: underline;
+  }
+
+  .section {
+    margin-bottom: 2rem;
+  }
+
+  .section h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .link-list li {
+    margin-bottom: 0.25rem;
+  }
+
+  .link-list a {
+    font-size: 1.05rem;
   }
 </style>
