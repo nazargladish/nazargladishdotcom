@@ -18,10 +18,10 @@ nicotine probably wins.
 
 But
 
-a lot of what feels like "addiction" after the first few days is conditioned association, not the body chemically demanding nicotine. You want to smoke when you think you want to. The moment you stop thinking about it, there's no craving.
+a lot of what feels like "addiction" after the first few days is conditioned association, not the body chemically demanding nicotine. You want to smoke when you think you want to. The moment you stop thinking about it, there's no craving. You feel what you think your feel.
 
-I don't think smoking itself is bad. Being addicted to it is (perhaps, as with any addiction). There's nothing good about consistent smoking, it numbs you, it fogs your brain, it's a band-aid, and it makes it look like there's no deeper problem to solve. Almost every smoker knows that, and yet they just aren't willing to sacrifice short-term dopamine for long-term, quality dopamine.
+I don't think smoking itself is bad. Being addicted to it is. There's nothing good about consistent smoking, it numbs you and it's a band-aid – it makes it look like there's no deeper problem to solve. Almost everyone knows that, and yet they just aren't willing to sacrifice short-term dopamine for long-term, quality dopamine.
 
-Solve the root cause. Once it's solved, you'll likely never really get addicted at all. Smoke all you want.
+Every time you know you don't want something, you know it's bad, and you light up anyway, your actions and your beliefs drift apart. Urge wins over what you actually think. That's probably worse than the cigarette itself.
 
-Posting this to get back to when I feel like lighting a cigarette again. I'm not someone who says one thing and does another.
+Solve the root cause and you'll likely never really get addicted at all. Posting this to get back to when I feel like lighting a cigarette again. I'm not someone who says one thing and does another.
