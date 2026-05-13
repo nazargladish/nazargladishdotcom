@@ -4,7 +4,7 @@ author: Nazar Gladish
 pubDatetime: 2026-04-05T16:00:00
 slug: thinkers-vs-doers
 featured: false
-draft: false
+draft: true
 description: ""
 ---
 
