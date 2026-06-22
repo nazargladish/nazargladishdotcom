@@ -1,91 +1,24 @@
 :root {
-  --bg-color: #1f1e1d;
-  --text-color: #e8e6df;
-  --text-muted: #a09f98;
-  --border-color: #555;
-}
-
-html[data-theme="light"] {
-  --bg-color: #fafaf7;
-  --text-color: #333;
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
   --text-muted: #888;
-  --border-color: #ddd;
 }
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
 html,
 body {
-  font-family: "Newsreader 24pt", "Times New Roman", sans-serif;
+  font-family: Charter, "Bitstream Charter", "Iowan Old Style", Georgia, serif;
   font-size: 20px;
-  line-height: 1.55;
+  line-height: 1.4;
   background-color: var(--bg-color);
   color: var(--text-color);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
-  color: var(--text-color);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 700;
-  line-height: 1.15;
-}
-
-h1 {
-  font-size: 3em;
-}
-
-h2 {
-  font-size: 1.4em;
-}
-
-h3 {
-  font-size: 1.2em;
-}
-
-p {
-  margin: 0 0 1em 0;
-}
-
-ul,
-ol {
-  margin: 0 0 1em 0;
-  padding-left: 1.5em;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th,
-td {
-  border: 1px solid var(--border-color);
-  padding: 8px;
-  text-align: left;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid var(--border-color);
-  margin: 2rem 0;
+  color: inherit;
 }
 
 img {
@@ -93,12 +26,11 @@ img {
   height: auto;
 }
 
-blockquote {
-  border-left: 3px solid var(--border-color);
-  padding-left: 1em;
-  margin: 1em 0;
-  font-style: italic;
-  color: var(--text-muted);
+/* Full-width placeholder for the manifesto photo grid (mock for now). */
+.manifesto-grid-mock {
+  width: 100%;
+  height: 38vh;
+  background: #cccccc;
 }
 
 .sr-only {
@@ -115,45 +47,4 @@ blockquote {
 
 .social-icon {
   stroke: var(--text-color);
-  transform: scale(1.15);
-  opacity: 0.9;
-}
-
-/* Theme toggle (shared) */
-.theme-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.toggle-track {
-  display: block;
-  width: 44px;
-  height: 24px;
-  background: #555;
-  border-radius: 12px;
-  position: relative;
-  transition: background 0.2s;
-}
-
-html[data-theme="light"] .toggle-track {
-  background: #ccc;
-}
-
-.toggle-thumb {
-  display: block;
-  width: 18px;
-  height: 18px;
-  background: #e8e6df;
-  border-radius: 50%;
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  transition: transform 0.2s;
-}
-
-html[data-theme="light"] .toggle-thumb {
-  transform: translateX(20px);
-  background: #fff;
 }

@@ -27,12 +27,13 @@ const {
   pubDatetime,
   modDatetime,
   timezone,
+  heroPlaceholder,
 } = post.data;
 
 const { Content, headings } = await render(post);
 
 const datetime = dayjs(pubDatetime).tz(timezone || SITE.timezone);
-const formattedDate = datetime.format("MMMM YYYY");
+const formattedDate = datetime.format("D MMMM YYYY");
 
 let ogImageUrl: string | undefined;
 if (typeof initOgImage === "string") ogImageUrl = initOgImage;
@@ -54,20 +55,44 @@ const layoutProps = {
   scrollSmooth: true,
 };
 
-const tocHeadings = headings.filter(h => h.depth <= 3);
+let sectionNumber = 0;
+const tocHeadings = headings
+  .filter(h => h.depth <= 3)
+  .map(h => ({
+    ...h,
+    number: h.depth === 2 ? ++sectionNumber : null,
+  }));
 ---
 
 <Layout {...layoutProps}>
-  <div class="post-layout">
+  {
+    heroPlaceholder && (
+      <div
+        class="manifesto-grid-mock"
+        role="img"
+        aria-label="Manifesto photo grid (placeholder)"
+      />
+    )
+  }
+
+  <main id="main-content" data-pagefind-body class="post-main">
+    <h1 transition:name={slugifyStr(title)}>
+      {title}
+    </h1>
+    {description && <p class="subtitle"><em>{description}</em></p>}
+    <p class="post-date">{formattedDate}</p>
+
     {
       tocHeadings.length > 0 && (
-        <aside class="toc-sidebar">
+        <aside class="toc-sidebar" data-pagefind-ignore>
           <h2 class="toc-title">Contents</h2>
           <ul class="toc-list">
-            {tocHeadings.map((heading, i) => (
+            {tocHeadings.map(heading => (
               <li class={heading.depth === 3 ? "toc-sub" : ""}>
                 <a href={`#${heading.slug}`}>
-                  {heading.depth === 2 ? `${i + 1}. ${heading.text}` : heading.text}
+                  {heading.depth === 2
+                    ? `${heading.number}. ${heading.text}`
+                    : heading.text}
                 </a>
               </li>
             ))}
@@ -76,26 +101,10 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
       )
     }
 
-    <main id="main-content" data-pagefind-body>
-      <header class="post-header">
-        <a href="/" class="site-name">Nazar Gladish</a>
-        <button id="theme-btn" class="theme-toggle" aria-label="Toggle theme">
-          <span class="toggle-track">
-            <span class="toggle-thumb"></span>
-          </span>
-        </button>
-      </header>
-      <h1 transition:name={slugifyStr(title)}>
-        {title}
-      </h1>
-      {description && <p class="subtitle"><em>{description}</em></p>}
-      <p class="post-date">{formattedDate}</p>
-
-      <article class="prose">
-        <Content />
-      </article>
-    </main>
-  </div>
+    <article class="prose">
+      <Content />
+    </article>
+  </main>
 </Layout>
 
 <script is:inline data-astro-rerun>
@@ -128,24 +137,6 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
   }
   updateScrollProgress();
 
-  function addHeadingLinks() {
-    const headings = Array.from(
-      document.querySelectorAll("h2, h3, h4, h5, h6")
-    );
-    for (const heading of headings) {
-      if (heading.closest(".toc-sidebar")) continue;
-      if (!heading.id) continue;
-      const link = document.createElement("a");
-      link.href = "#" + heading.id;
-      const span = document.createElement("span");
-      span.ariaHidden = "true";
-      span.innerText = "#";
-      link.appendChild(span);
-      heading.appendChild(link);
-    }
-  }
-  addHeadingLinks();
-
   function attachCopyButtons() {
     const copyButtonLabel = "Copy";
     const codeBlocks = Array.from(document.querySelectorAll("pre"));
@@ -171,48 +162,207 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
   }
   attachCopyButtons();
 
-  document.addEventListener("astro:after-swap", () =>
-    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  // Viewport-Y of the top of an element's first-line capital glyphs.
+  // Uses canvas TextMetrics so it accounts for font size, leading and cap
+  // height rather than just the line-box top (which differ between the small
+  // "Contents" heading and the large article title).
+  function glyphTopY(el) {
+    const rect = el.getClientRects()[0];
+    if (!rect) return null;
+    const cs = getComputedStyle(el);
+    const fontSize = parseFloat(cs.fontSize);
+    const ctx = (glyphTopY._c ||= document.createElement("canvas")).getContext(
+      "2d"
+    );
+    ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${fontSize}px ${cs.fontFamily}`;
+    const m = ctx.measureText("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    const halfLeading =
+      (rect.height - (m.fontBoundingBoxAscent + m.fontBoundingBoxDescent)) / 2;
+    const baseline = rect.top + halfLeading + m.fontBoundingBoxAscent;
+    return baseline - m.actualBoundingBoxAscent;
+  }
+
+  // Toggle the bottom fade: shown only when the list overflows AND there is
+  // still content below the current scroll position.
+  function updateTocClip(sidebar) {
+    const moreBelow =
+      sidebar.scrollHeight - sidebar.scrollTop - sidebar.clientHeight > 2;
+    sidebar.classList.toggle("toc-clipped", moreBelow);
+  }
+
+  const MIN_TOC_TOP = 24; // px the "Contents" glyph stops at once pinned to top
+  let tocOffsets = null; // cached, scroll-independent glyph offsets
+
+  function isDesktopToc() {
+    return !window.matchMedia("(max-width: 1024px)").matches;
+  }
+
+  // Measure the (scroll-independent) glyph offsets once, so the per-scroll
+  // repositioning is just cheap rect math.
+  function measureTocOffsets(sidebar, title, tocTitle) {
+    const tRect = title.getClientRects()[0];
+    const titleGlyph = glyphTopY(title);
+    const tocGlyph = glyphTopY(tocTitle);
+    if (!tRect || !Number.isFinite(titleGlyph) || !Number.isFinite(tocGlyph))
+      return null;
+    const sidebarTop = parseFloat(getComputedStyle(sidebar).top) || 0;
+    return {
+      titleGlyphInLine: titleGlyph - tRect.top, // glyph top within title's line
+      tocGlyphFromTop: tocGlyph - sidebarTop, // sidebar top -> "Contents" glyph
+    };
+  }
+
+  // Position "Contents" so it tracks the title as the page scrolls, then pins
+  // near the viewport top once the title scrolls past — i.e. sticky behaviour.
+  function positionToc() {
+    const sidebar = document.querySelector(".toc-sidebar");
+    const title = document.querySelector(".post-main h1");
+    const tocTitle = document.querySelector(".toc-title");
+    if (!sidebar || !title || !tocTitle) return;
+    if (!isDesktopToc()) {
+      // static, full list in flow on narrow screens — always visible
+      sidebar.style.top = "";
+      sidebar.style.maxHeight = "";
+      sidebar.classList.remove("toc-clipped", "toc-hidden");
+      return;
+    }
+    if (!tocOffsets) tocOffsets = measureTocOffsets(sidebar, title, tocTitle);
+    if (!tocOffsets) return;
+    const tRect = title.getClientRects()[0];
+    if (!tRect) return;
+    const titleGlyphY = tRect.top + tocOffsets.titleGlyphInLine; // viewport Y now
+    // Only reveal "Contents" once the title has scrolled up to the pin line —
+    // i.e. the user has scrolled to where the section begins.
+    const pinned = titleGlyphY <= MIN_TOC_TOP;
+    sidebar.classList.toggle("toc-hidden", !pinned);
+    const newTop = MIN_TOC_TOP - tocOffsets.tocGlyphFromTop;
+    sidebar.style.top = newTop + "px";
+    sidebar.style.maxHeight = window.innerHeight - newTop - 24 + "px";
+    updateTocClip(sidebar);
+  }
+
+  function remeasureToc() {
+    tocOffsets = null; // font/layout may have changed
+    positionToc();
+  }
+
+  // Scroll-spy: cache the TOC links and the headings they point to.
+  let tocLinks = [];
+  let tocTargets = [];
+  function refreshTocLinks() {
+    const sidebar = document.querySelector(".toc-sidebar");
+    tocLinks = sidebar
+      ? Array.from(sidebar.querySelectorAll(".toc-list a"))
+      : [];
+    tocTargets = tocLinks.map(a => {
+      const id = decodeURIComponent((a.hash || "").slice(1));
+      return id ? document.getElementById(id) : null;
+    });
+  }
+
+  // Highlight the link for the heading nearest the top of the viewport.
+  function updateActiveSection() {
+    if (!tocLinks.length) return;
+    const offset = 100; // a heading becomes "current" as it nears the top
+    let activeIndex = 0;
+    for (let i = 0; i < tocTargets.length; i++) {
+      const el = tocTargets[i];
+      if (el && el.getBoundingClientRect().top - offset <= 0) activeIndex = i;
+    }
+    tocLinks.forEach((a, i) =>
+      a.classList.toggle("toc-active", i === activeIndex)
+    );
+  }
+
+  refreshTocLinks();
+  remeasureToc();
+  updateActiveSection();
+  // Enable the fade only after the initial hidden state is painted.
+  requestAnimationFrame(() => {
+    const sb = document.querySelector(".toc-sidebar");
+    if (sb) sb.classList.add("toc-animate");
+  });
+  window.addEventListener("resize", remeasureToc);
+  window.addEventListener("load", remeasureToc);
+  if (document.fonts && document.fonts.ready)
+    document.fonts.ready.then(remeasureToc);
+
+  let tocTicking = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (tocTicking) return;
+      tocTicking = true;
+      requestAnimationFrame(() => {
+        positionToc();
+        updateActiveSection();
+        tocTicking = false;
+      });
+    },
+    { passive: true }
   );
+
+  const tocSidebar = document.querySelector(".toc-sidebar");
+  if (tocSidebar)
+    tocSidebar.addEventListener("scroll", () => updateTocClip(tocSidebar));
+
+  document.addEventListener("astro:after-swap", () => {
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" });
+    refreshTocLinks();
+    remeasureToc();
+    updateActiveSection();
+  });
 </script>
 
 <style>
-  .post-header {
-    display: flex;
-    align-items: center;
-    padding: 0 0 2rem 0;
-  }
-
-  .site-name {
-    font-weight: 600;
-    font-size: 29px;
-    flex: 1;
-    text-decoration: none;
-  }
-
-  .site-name:hover {
-    text-decoration: none;
-  }
-
-  .post-layout {
-    display: flex;
-    justify-content: center;
-    max-width: 960px;
+  .post-main {
+    max-width: 720px;
     margin: 0 auto;
     padding: 2rem 2rem 4rem;
-    gap: 3rem;
   }
 
   .toc-sidebar {
-    width: 200px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 80px;
-    align-self: flex-start;
+    position: fixed;
+    /* Align "Contents" with the article title's first line:
+       .post-main padding-top (2rem) */
+    top: 2rem;
+    left: 1.75rem;
+    width: 240px;
+    max-height: calc(100vh - 7rem);
+    overflow-y: auto;
+    z-index: 5;
+  }
+
+  /* Animate reveals, but only after the initial hidden state is set (added by
+     JS on the next frame) so the page doesn't fade the sidebar out on load. */
+  .toc-sidebar.toc-animate {
+    transition: opacity 0.2s ease;
+  }
+
+  /* Hidden until the reader scrolls down to where the section begins. */
+  .toc-sidebar.toc-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* When the list overflows and there's more below, fade the bottom so it's
+     clear the list continues and no link is left sharply half-cropped. */
+  .toc-sidebar.toc-clipped {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 calc(100% - 2.5rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      #000 calc(100% - 2.5rem),
+      transparent
+    );
   }
 
   .toc-title {
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     margin: 0 0 1rem 0;
   }
@@ -233,7 +383,7 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
 
   .toc-list a {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     line-height: 1.4;
     display: block;
   }
@@ -243,49 +393,79 @@ const tocHeadings = headings.filter(h => h.depth <= 3);
     text-decoration: none;
   }
 
-  main {
-    flex: 1;
-    max-width: 600px;
-    padding: 0;
+  .toc-list a.toc-active {
+    color: var(--text-color);
+    font-weight: 700;
   }
 
   h1 {
-    font-size: 62px;
-    line-height: 1.1;
-    margin: 0 0 0.5rem 0;
-  }
-
-  .subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    color: var(--text-muted);
-  }
-
-  .post-date {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    margin-bottom: 2.5rem;
+    margin-top: 0;
   }
 
   .prose {
-    font-size: 20px;
-    line-height: 1.6;
+    line-height: 1.5;
+  }
+
+  .prose p {
+    margin: 0 0 1.4rem 0;
+  }
+
+  /* Section headings as full-width colored banners (matches the editor look) */
+  .prose h2 {
+    font-weight: 500;
+    font-size: 1.7rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    padding: 0.4rem 0.7rem;
+    margin: 2.5rem 0 1.4rem;
+    color: #ffffff;
+    background: #2c4f4f;
+  }
+
+  .prose h2:nth-of-type(5n + 1) {
+    background: #2c4f4f;
+    color: #ffffff;
+  }
+  .prose h2:nth-of-type(5n + 2) {
+    background: #57b277;
+    color: #11331e;
+  }
+  .prose h2:nth-of-type(5n + 3) {
+    background: #c75c5c;
+    color: #ffffff;
+  }
+  .prose h2:nth-of-type(5n + 4) {
+    background: #46699e;
+    color: #ffffff;
+  }
+  .prose h2:nth-of-type(5n + 5) {
+    background: #d9a13c;
+    color: #2a1c06;
+  }
+
+  .prose h3 {
+    font-weight: 500;
+    font-size: 1.25rem;
+    margin: 1.8rem 0 0.8rem;
+  }
+
+  .post-date {
+    color: #555;
+  }
+
+  @media (max-width: 1024px) {
+    /* In flow, below the title — not a fixed sidebar */
+    .toc-sidebar {
+      position: static;
+      width: auto;
+      margin: 1rem 0 2.5rem;
+      max-height: none;
+    }
   }
 
   @media (max-width: 768px) {
-    .post-layout {
-      flex-direction: column;
+    .post-main {
       padding: 1rem 1rem 3rem;
-      gap: 1.5rem;
-    }
-
-    .toc-sidebar {
-      position: static;
-      width: 100%;
-    }
-
-    h1 {
-      font-size: 2.5rem;
     }
   }
 </style>

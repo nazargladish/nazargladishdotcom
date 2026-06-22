@@ -5,12 +5,7 @@ import { SITE } from "@/config";
 
 <Layout title={`404 Not Found | ${SITE.title}`}>
   <header class="page-header">
-    <a href="/" class="site-name">Nazar Gladish</a>
-    <button id="theme-btn" class="theme-toggle" aria-label="Toggle theme">
-      <span class="toggle-track">
-        <span class="toggle-thumb"></span>
-      </span>
-    </button>
+    <a href="/" class="site-name">notes to himself</a>
   </header>
   <main id="main-content">
     <h1>404</h1>
@@ -23,7 +18,7 @@ import { SITE } from "@/config";
   .page-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 1rem 2rem;
   }
 
@@ -36,16 +31,6 @@ import { SITE } from "@/config";
   main {
     max-width: 680px;
     margin: 0 auto;
-    padding: 4rem 24px;
-    text-align: center;
-  }
-
-  h1 {
-    font-size: 4rem;
-    margin: 0 0 0.5rem 0;
-  }
-
-  a {
-    text-decoration: underline;
+    padding: 2rem 24px 4rem;
   }
 </style>

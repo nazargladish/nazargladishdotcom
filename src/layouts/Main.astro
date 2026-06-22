@@ -20,12 +20,7 @@ const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
 ---
 
 <header class="page-header">
-  <a href="/" class="site-name">Nazar Gladish</a>
-  <button id="theme-btn" class="theme-toggle" aria-label="Toggle theme">
-    <span class="toggle-track">
-      <span class="toggle-thumb"></span>
-    </span>
-  </button>
+  <a href="/" class="site-name">notes to himself</a>
 </header>
 <main data-backUrl={backUrl} id="main-content">
   {
@@ -59,7 +54,7 @@ const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
   .page-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 1rem 2rem;
   }
 
@@ -77,9 +72,5 @@ const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
     max-width: 680px;
     margin: 0 auto;
     padding: 1rem 24px 4rem;
-  }
-
-  h1 {
-    margin: 0 0 1rem 0;
   }
 </style>
