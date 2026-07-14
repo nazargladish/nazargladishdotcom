@@ -1,0 +1,81 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  title="Work with me – Nazar Gladish"
+  description="I book qualified sales meetings for founders and agencies that sell high-value services. You only pay if I deliver. No strings."
+>
+  <main id="main-content" data-layout="work">
+    <header>
+      <h1>
+        I book you sales meetings.<br />You only pay if I deliver. No strings.
+      </h1>
+    </header>
+
+    <section class="section">
+      <p>
+        For founders and agencies that sell high&#8209;value work and are done
+        chasing pipeline. I build the outreach, I run it, and you only hear from
+        me when there's a meeting on your calendar.
+      </p>
+
+      <p>
+        It all runs on Kestrel, a system I built and don't sell. It watches the
+        whole market for the moment a company becomes a buyer: a fresh raise, a
+        new exec, a hiring surge. Then it reaches out, in your name, before
+        anyone else does. You never see the machine. You just take the calls it
+        books.
+      </p>
+
+      <p>
+        I taught myself to code, passed the senior&#8209;engineer trial at <a
+          href="https://github.com/antiwork"
+          target="_blank"
+          rel="noopener noreferrer">Gumroad</a
+        >, shipped to a platform with 7M monthly users, and worked inside one of
+        the biggest names in outbound. I built the system, and I run every
+        campaign myself. I only win when you do.
+      </p>
+    </section>
+
+    <section class="cta">
+      <p>
+        I take on a few clients at a time. Tell me what you sell, and I'll show
+        you the meetings you're missing.
+      </p>
+      <p>
+        <a href="mailto:hi@nazargladish.com?subject=Book%20me%20meetings"
+          >hi@nazargladish.com</a
+        >
+      </p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const layout = (document.querySelector("#main-content") as HTMLElement)
+      ?.dataset?.layout;
+    if (layout) {
+      sessionStorage.setItem("backUrl", "/work");
+    }
+  });
+</script>
+
+<style>
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2rem 24px 4rem;
+  }
+  header h1 {
+    line-height: 1.25;
+  }
+  .section {
+    margin-top: 2rem;
+  }
+  .cta {
+    margin-top: 2.5rem;
+  }
+</style>
