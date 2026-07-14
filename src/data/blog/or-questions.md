@@ -1,7 +1,7 @@
 ---
 title: "OR questions"
 author: Nazar Gladish
-pubDatetime: 2026-07-14T12:00:00
+pubDatetime: 2026-07-14T06:00:00
 slug: or-questions
 featured: false
 draft: false
